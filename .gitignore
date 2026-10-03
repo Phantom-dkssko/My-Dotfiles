@@ -1,0 +1,23 @@
+# Arquivos temporários
+*.tmp
+*.log
+*.swp
+*~
+
+# Segredos
+.env
+.env.*
+*.key
+*.pem
+
+# Cache
+.cache/
+__pycache__/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Backup
+*.bak
+*.backup
