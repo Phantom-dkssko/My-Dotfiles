@@ -84,8 +84,10 @@ if [[ "$CONFIRM" =~ ^[Ss]$ ]]; then
     echo "$NEW_VERSION" > "$VERSION_FILE"
     git add .
     git commit -m "$CHANGE_DESCRIPTION"
+    git tag -a "v$NEW_VERSION" -m "$CHANGE_DESCRIPTION"
 else
     echo "Commit cancelado."
     exit 0
 fi
 
+# teste do sistema de tags
