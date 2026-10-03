@@ -44,5 +44,48 @@ esac
 echo
 echo "Tipo selecionado: $TYPE"
 echo
+VERSION="${CURRENT_VERSION%-*}"
+SUFFIX="${CURRENT_VERSION#*-}"
+
+IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+case "$TYPE" in
+    PATCH)
+        PATCH=$((PATCH + 1))
+        ;;
+    MINOR)
+        MINOR=$((MINOR + 1))
+        PATCH=0
+        ;;
+    MAJOR)
+        MAJOR=$((MAJOR + 1))
+        MINOR=0
+        PATCH=0
+        ;;
+esac
+
+NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}-${SUFFIX}"
+
+
+echo
+echo "Nova versão: v$NEW_VERSION"
+
+echo
+read -rp "Descrição da alteração: " CHANGE_DESCRIPTION
+
+echo
 echo "Verificando alterações..."
 git status
+
+echo
+read -rp "Confirmar commit? [s/N]: " CONFIRM
+
+if [[ "$CONFIRM" =~ ^[Ss]$ ]]; then
+    echo "$NEW_VERSION" > "$VERSION_FILE"
+    git add .
+    git commit -m "$CHANGE_DESCRIPTION"
+else
+    echo "Commit cancelado."
+    exit 0
+fi
+
