@@ -33,52 +33,85 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 
 # ------------------------------------------------------------
-# Função para mostrar versões
+# Criar lista de versões
 # ------------------------------------------------------------
 
-show_versions() {
-    git tag --sort=-version:refname
-}
+mapfile -t TAGS < <(git tag --sort=-version:refname)
+
+if [ "${#TAGS[@]}" -eq 0 ]; then
+    echo "Nenhuma versão encontrada."
+    exit 1
+fi
 
 # ------------------------------------------------------------
-# Versão informada por argumento
+# Argumento opcional
 # ------------------------------------------------------------
 
 if [ -n "${1:-}" ]; then
-    TARGET_VERSION="$1"
+
+    if [[ "$1" =~ ^[0-9]+$ ]]; then
+        SELECTION="$1"
+
+        if [ "$SELECTION" -lt 1 ] || [ "$SELECTION" -gt "${#TAGS[@]}" ]; then
+            echo "ERRO: número de versão inválido."
+            exit 1
+        fi
+
+        TARGET_VERSION="${TAGS[$((SELECTION - 1))]}"
+
+    else
+
+        TARGET_VERSION="$1"
+
+        if [[ "$TARGET_VERSION" != v* ]]; then
+            TARGET_VERSION="v$TARGET_VERSION"
+        fi
+
+        if ! git rev-parse "$TARGET_VERSION" >/dev/null 2>&1; then
+            echo "ERRO: versão '$TARGET_VERSION' não encontrada."
+            exit 1
+        fi
+
+    fi
+
 else
+
+    # --------------------------------------------------------
+    # Mostrar versões numeradas
+    # --------------------------------------------------------
+
     echo "Versões disponíveis:"
     echo
 
-    TAGS=$(show_versions)
+    for i in "${!TAGS[@]}"; do
+        NUMBER=$((i + 1))
+        echo "[$NUMBER] ${TAGS[$i]}"
+    done
 
-    if [ -z "$TAGS" ]; then
-        echo "Nenhuma versão encontrada."
+    echo
+    echo "Total: ${#TAGS[@]} versões"
+    echo
+
+    read -rp "Escolha uma versão [1-${#TAGS[@]}]: " SELECTION
+
+    # --------------------------------------------------------
+    # Validar seleção
+    # --------------------------------------------------------
+
+    if ! [[ "$SELECTION" =~ ^[0-9]+$ ]]; then
+        echo
+        echo "ERRO: escolha um número."
         exit 1
     fi
 
-    echo "$TAGS"
-    echo
+    if [ "$SELECTION" -lt 1 ] || [ "$SELECTION" -gt "${#TAGS[@]}" ]; then
+        echo
+        echo "ERRO: opção inválida."
+        exit 1
+    fi
 
-    read -rp "Digite a versão desejada: " TARGET_VERSION
-fi
+    TARGET_VERSION="${TAGS[$((SELECTION - 1))]}"
 
-# ------------------------------------------------------------
-# Aceitar versão com ou sem 'v'
-# ------------------------------------------------------------
-
-if [[ "$TARGET_VERSION" != v* ]]; then
-    TARGET_VERSION="v$TARGET_VERSION"
-fi
-
-# ------------------------------------------------------------
-# Verificar se a tag existe
-# ------------------------------------------------------------
-
-if ! git rev-parse "$TARGET_VERSION" >/dev/null 2>&1; then
-    echo
-    echo "ERRO: versão '$TARGET_VERSION' não encontrada."
-    exit 1
 fi
 
 # ------------------------------------------------------------
@@ -91,7 +124,8 @@ echo
 
 git show -s \
     --format="Commit: %h%nData:   %ad%nAutor:  %an%nMensagem: %s" \
-    --date=format:"%Y-%m-%d %H:%M"
+    --date=format:"%Y-%m-%d %H:%M" \
+    "$TARGET_VERSION"
 
 echo
 
@@ -99,7 +133,7 @@ echo "ATENÇÃO:"
 echo "O repositório será colocado exatamente no estado dessa versão."
 echo "O Git ficará em estado 'detached HEAD'."
 echo
-echo "Para voltar ao desenvolvimento atual depois:"
+echo "Para voltar ao desenvolvimento atual:"
 echo "  git switch main"
 echo
 
@@ -126,8 +160,6 @@ echo "Rollback concluído!"
 echo "=========================================="
 echo
 echo "Versão atual: $TARGET_VERSION"
-echo
-echo "Você está agora no estado dessa versão."
 echo
 echo "Para voltar ao desenvolvimento atual:"
 echo "  git switch main"

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5.3-alpha
+
+- Melhor seleção numérica do rice-rollback
+
+
 ## v0.5.2-alpha
 
 - Adiciona comando rice-rollback
