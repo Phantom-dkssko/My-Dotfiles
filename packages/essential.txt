@@ -1,0 +1,14 @@
+hyprland
+waybar
+wofi
+kitty
+fish
+thunar
+thunar-archive-plugin
+fastfetch
+quickshell
+qt6ct
+awww
+grim
+slurp
+wl-clipboard

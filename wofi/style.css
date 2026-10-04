@@ -1,0 +1,22 @@
+window {
+    background-color: rgba(17, 19, 24, 0.96);
+    border: 2px solid #88c0d0;
+    border-radius: 12px;
+}
+
+#input {
+    margin: 10px;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: #2e3440;
+    color: #d8dee9;
+}
+
+#entry {
+    padding: 8px;
+}
+
+#entry:selected {
+    background-color: #88c0d0;
+    color: #111318;
+}
