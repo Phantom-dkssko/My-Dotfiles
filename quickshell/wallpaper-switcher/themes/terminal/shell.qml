@@ -26,7 +26,7 @@ PanelWindow {
     FolderListModel {
         id: wallpapers
 
-        folder: "Qt.resolvedUrl("../../../wallpapers")"
+        folder: Qt.resolvedUrl(Quickshell.shellDir + "/../../../../wallpapers")
 
         nameFilters: [
             "*.jpg",

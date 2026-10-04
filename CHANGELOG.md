@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5.4-alpha
+
+- fix: wallpaper switcher and automatic wallpaper startup
+
+
 ## v0.5.3-alpha
 
 - Melhor seleção numérica do rice-rollback
