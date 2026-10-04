@@ -39,8 +39,10 @@ done
 echo
 echo "==> Instalando wallpapers..."
 
-mkdir -p "$HOME/Pictures/Wallpapers"
-cp -r "$REPO_DIR/wallpapers/." "$HOME/Pictures/Wallpapers/"
+mkdir -p "$CONFIG_DIR/wallpapers"
+cp -r "$REPO_DIR/wallpapers/." "$CONFIG_DIR/wallpapers/"
+
+echo
 
 echo
 echo "==> Configurando Thunar como gerenciador padrão..."

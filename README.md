@@ -1,422 +1,482 @@
-# 🐧 My Dotfiles
+# My Dotfiles
 
-Meu ambiente Linux, configurações, comandos úteis, scripts e documentação.
+Personal dotfiles and rice configuration for **CachyOS + Hyprland**.
 
----
+This repository contains my desktop configuration, themes, wallpapers, scripts, package lists and tools used to rebuild my setup after reinstalling the system.
 
-# 📁 Estrutura
-
-* `hyprland/` — Configurações do Hyprland
-* `waybar/` — Configuração da Waybar
-* `wofi/` — Configuração do Wofi
-* `kitty/` — Configuração do Kitty
-* `fish/` — Configuração do Fish
-* `dolphin/` — Configurações relacionadas ao Dolphin
-* `fastfetch/` — Configuração do Fastfetch
-* `wallpapers/` — Wallpapers
-* `themes/` — Temas
-* `icons/` — Ícones
-* `commands/` — Comandos úteis do Linux e aplicativos
-* `scripts/` — Scripts do projeto
-* `shortcuts/` — Atalhos de teclado
-* `packages/` — Lista de pacotes
-* `docs/` — Documentação
-* `screenshots/` — Capturas do rice
+> **Status:** Active development
+> **Current version:** `0.5.3-alpha`
 
 ---
 
-# ✏️ Como modificar o projeto
+## ✨ Features
 
-O projeto fica armazenado em duas partes:
+* 🪟 Hyprland window manager configuration
+* 📊 Waybar with multiple themes
+* 🚀 Wofi application launcher
+* 🖥️ Customized Kitty terminal
+* 🐚 Fish shell configuration
+* 📁 Thunar file manager integration
+* 🖼️ Wallpaper management with awww
+* 🎨 Quickshell wallpaper and theme selector
+* 💻 Customized Fastfetch
+* 📦 Essential and optional package lists
+* ⚙️ Automatic installation script
+* 🔄 Git-based versioning
+* ↩️ Version rollback system
+* ⌨️ Custom Hyprland keybinds
+
+---
+
+## 🖥️ Environment
+
+| Component          | Software   |
+| ------------------ | ---------- |
+| Operating System   | CachyOS    |
+| Window Manager     | Hyprland   |
+| Shell              | Fish       |
+| Terminal           | Kitty      |
+| Status Bar         | Waybar     |
+| Launcher           | Wofi       |
+| File Manager       | Thunar     |
+| Wallpaper Daemon   | awww       |
+| Wallpaper UI       | Quickshell |
+| System Information | Fastfetch  |
+| Qt Configuration   | qt6ct      |
+
+---
+
+## 📦 Components
+
+The main applications and projects used by this rice:
+
+* [Hyprland](https://hyprland.org/)
+* [Waybar](https://github.com/Alexays/Waybar)
+* [Wofi](https://github.com/SimplyCEO/wofi)
+* [Kitty](https://sw.kovidgoyal.net/kitty/)
+* [Fish](https://fishshell.com/)
+* [Thunar](https://docs.xfce.org/xfce/thunar/start)
+* [Fastfetch](https://github.com/fastfetch-cli/fastfetch)
+* [Quickshell](https://github.com/quickshell-mirror/quickshell)
+* [awww](https://github.com/waycrate/awww)
+* [grim](https://github.com/emersion/grim)
+* [slurp](https://github.com/emersion/slurp)
+* [wl-clipboard](https://github.com/bugaevc/wl-clipboard)
+* [qt6ct](https://github.com/trialuser02/qt6ct)
+
+---
+
+## 🎨 Themes
+
+### Waybar
+
+The rice currently includes four Waybar themes:
+
+* Nord
+* Glass
+* Minimal
+* Terminal
+
+Change the Waybar theme with:
+
+**Super + Shift + B**
+
+### Wallpaper Switcher
+
+The Quickshell wallpaper interface currently includes:
+
+* Terminal
+* Glass
+* Minimal
+
+Open the wallpaper switcher:
+
+**Super + W**
+
+Open the wallpaper theme selector:
+
+**Super + Shift + W**
+
+---
+
+## 🖼️ Wallpapers
+
+Wallpapers used by the rice are stored inside:
 
 ```text
-Computador
-    ↓
-Repositório Git local
-    ↓
-GitHub
+wallpapers/
 ```
 
-As alterações são feitas primeiro no computador.
+The collection includes wallpapers from different sources and artists.
 
-Depois usamos o Git para registrar e enviar essas alterações para o GitHub.
+### PikaOS Wallpapers
 
-## 📄 Editar um arquivo
+Some wallpapers come from the PikaOS wallpaper collection:
 
-Por exemplo, para editar o README:
+[PikaOS Wallpapers](https://github.com/PikaOS-Linux/pkg-pika-wallpapers/tree/main/backgrounds/pika)
 
-```bash
-nano README.md
-```
-
-Para editar a configuração do Hyprland:
-
-```bash
-nano hyprland/hyprland.conf
-```
-
-Você também pode usar um editor gráfico, como VS Code.
+Please respect the original licenses and credits of wallpapers and artwork included in this repository.
 
 ---
 
-## 📁 Criar uma pasta
+## ⌨️ Keybinds
 
-Exemplo:
+| Shortcut                   | Action                   |
+| -------------------------- | ------------------------ |
+| Super + Enter              | Open terminal            |
+| Super + T                  | Open terminal            |
+| Super + Space              | Open launcher            |
+| Super + E                  | Open Thunar              |
+| Super + B                  | Open browser             |
+| Super + Q                  | Close active window      |
+| Super + M                  | Exit Hyprland            |
+| Super + Shift + R          | Reload Hyprland          |
+| Super + V                  | Open Discord             |
+| Super + F                  | Toggle fullscreen        |
+| Super + W                  | Wallpaper switcher       |
+| Super + Shift + W          | Wallpaper theme selector |
+| Super + Shift + B          | Waybar theme selector    |
+| Super + Arrow Keys         | Move focus               |
+| Super + Shift + Arrow Keys | Move window              |
+| Super + 1-9                | Change workspace         |
+| Super + Shift + 1-9        | Move window to workspace |
+| Super + Shift + S          | Screenshot               |
 
-```bash
-mkdir nome-da-pasta
-```
+---
 
-Criar uma pasta dentro de outra:
+## 📁 Project Structure
 
-```bash
-mkdir -p commands/linux
+```text
+my-dotfiles/
+│
+├── hyprland/
+│   └── hyprland.conf
+│
+├── waybar/
+│   ├── config.jsonc
+│   ├── style.css
+│   ├── theme-selector.sh
+│   └── themes/
+│
+├── wofi/
+│   └── style.css
+│
+├── kitty/
+│   ├── kitty.conf
+│   ├── current-theme.conf
+│   └── Adwaita dark.conf
+│
+├── fish/
+│   └── config.fish
+│
+├── thunar/
+│   ├── accels.scm
+│   └── uca.xml
+│
+├── fastfetch/
+│   ├── config.jsonc
+│   └── aesthetic.jpg
+│
+├── quickshell/
+│   └── wallpaper-switcher/
+│
+├── wallpapers/
+│
+├── packages/
+│   ├── essential.txt
+│   └── optional.txt
+│
+├── scripts/
+│   ├── install/
+│   ├── update/
+│   ├── sync/
+│   └── rollback/
+│
+├── commands/
+├── shortcuts/
+├── themes/
+├── icons/
+├── screenshots/
+├── docs/
+│
+├── VERSION
+├── CHANGELOG.md
+└── README.md
 ```
 
 ---
 
-## 📄 Criar um arquivo
+## 🚀 Installation
+
+The goal of this repository is to make rebuilding the desktop after a system reinstall as simple as possible.
+
+### 1. Clone the repository
 
 ```bash
-touch arquivo.md
+git clone <REPOSITORY_URL>
+cd my-dotfiles
 ```
 
-Exemplo:
+### 2. Run the installer
 
 ```bash
-touch commands/linux/network.md
+chmod +x scripts/install/install.sh
+./scripts/install/install.sh
 ```
+
+The installer handles the main parts of the setup automatically.
+
+### What the installer does
+
+1. Installs essential packages.
+2. Creates a backup of existing configurations.
+3. Installs the Hyprland configuration.
+4. Installs Waybar and its themes.
+5. Installs Wofi.
+6. Installs Kitty configuration.
+7. Installs Fish configuration.
+8. Installs Thunar configuration.
+9. Installs Fastfetch configuration.
+10. Installs Quickshell configuration.
+11. Copies the wallpaper collection.
+12. Sets Thunar as the default file manager.
+13. Configures the awww wallpaper daemon.
+14. Sets executable permissions on the required scripts.
+
+After installation, logging out and back into Hyprland is recommended.
 
 ---
 
-## 🗑️ Remover um arquivo
+## 💾 Backups
 
-```bash
-rm arquivo.md
+The installer does not simply overwrite everything.
+
+Existing configuration directories are moved into a timestamped backup directory before the new configuration is installed.
+
+Example:
+
+```text
+~/.config/dotfiles-backup-20261004-120000/
 ```
 
-⚠️ Tenha cuidado com `rm`, pois ele remove o arquivo.
+This makes it possible to recover previous configurations if necessary.
 
 ---
 
-# 🔧 Git
+## 🔄 Versioning
 
-## Ver o estado do projeto
+The project uses Git tags and semantic-style versioning.
+
+Current version:
+
+```text
+0.5.3-alpha
+```
+
+Example release tag:
+
+```text
+v0.5.3-alpha
+```
+
+The project uses:
+
+* **PATCH** — small fixes
+* **MINOR** — new features
+* **MAJOR** — major changes
+
+Development versions currently use the `alpha` suffix.
+
+---
+
+## ↩️ Rollback
+
+The rice includes a rollback system for returning to previous versions.
+
+The goal is to make it possible to experiment with the rice without permanently breaking the setup.
+
+Available versions can be viewed with:
+
+```bash
+./scripts/rice-versions.sh
+```
+
+Previous versions can be restored using:
+
+```bash
+./scripts/rollback/rice-rollback.sh
+```
+
+Rollback requires the Git working tree to be clean.
+
+---
+
+## 🛠️ Development
+
+This repository is actively developed directly on the system where the rice is being used.
+
+Before making changes:
 
 ```bash
 git status
 ```
 
-Mostra o que foi modificado, criado ou removido.
-
----
-
-## Ver exatamente o que mudou
-
-```bash
-git diff
-```
-
-Mostra as alterações feitas nos arquivos.
-
----
-
-## Adicionar alterações
+After making changes:
 
 ```bash
 git add .
+git commit
 ```
 
-Coloca as alterações na área que será usada para criar o próximo commit.
+The project uses Git tags to preserve stable points in the development history.
 
 ---
 
-## Criar uma versão
+## 🗺️ Roadmap
 
-```bash
-git commit -m "Descrição da mudança"
-```
+### Completed
 
-Exemplo:
+* [x] Hyprland configuration
+* [x] Waybar configuration
+* [x] Waybar theme selector
+* [x] Wofi configuration
+* [x] Kitty configuration
+* [x] Fish configuration
+* [x] Thunar configuration
+* [x] Fastfetch configuration
+* [x] awww wallpaper system
+* [x] Quickshell wallpaper switcher
+* [x] Wallpaper themes
+* [x] Package lists
+* [x] Automatic installer
+* [x] Version system
+* [x] Rollback system
 
-```bash
-git commit -m "Atualiza configuração do Waybar"
-```
+### Planned
 
-Um commit funciona como um ponto salvo no histórico do projeto.
-
----
-
-## Enviar para o GitHub
-
-```bash
-git push
-```
-
-Envia os commits que estão no computador para o GitHub.
-
----
-
-## Baixar alterações do GitHub
-
-```bash
-git pull
-```
-
-Atualiza o repositório local com as alterações que estão no GitHub.
+* [ ] Git synchronization script
+* [ ] More wallpaper themes
+* [ ] More Waybar themes
+* [ ] More automated configuration checks
+* [ ] Improved troubleshooting tools
+* [ ] Full one-command restoration
+* [ ] Better documentation
+* [ ] Rice screenshots and showcase
 
 ---
 
-# 🔄 Fluxo normal
+## 🧪 Tested Environment
 
-Quando você modificar qualquer coisa:
-
-```bash
-git status
-```
-
-↓
-
-```bash
-git diff
-```
-
-↓
-
-```bash
-git add .
-```
-
-↓
-
-```bash
-git commit -m "Descrição da mudança"
-```
-
-↓
-
-```bash
-git push
-```
-
----
-
-# 🕐 Histórico
-
-Ver todas as versões:
-
-```bash
-git log --oneline
-```
-
-Exemplo:
+The rice is currently developed and tested on:
 
 ```text
-a31f92c Atualiza Waybar
-7bc812a Novo tema
-31ac221 Configuração inicial
+CachyOS
+Hyprland
+Wayland
+Fish
 ```
 
-Cada código representa um commit.
+Other Arch-based distributions may work, but CachyOS is the primary target.
 
 ---
 
-# ⏪ Voltar para uma versão antiga
+## 🐛 Troubleshooting
 
-Primeiro veja o histórico:
+### Hyprland configuration
+
+Check for configuration errors:
 
 ```bash
-git log --oneline
+hyprctl configerrors
 ```
 
-Depois você pode acessar uma versão específica:
+Reload the configuration:
 
 ```bash
-git checkout ID_DO_COMMIT
+hyprctl reload
 ```
 
-Exemplo:
+### Waybar
+
+Restart Waybar:
 
 ```bash
-git checkout a31f92c
+pkill waybar
+waybar &
 ```
 
-⚠️ O sistema de rollback automático será criado posteriormente em `scripts/rollback/`.
+### awww
 
----
-
-# 🔗 Conexão com o GitHub
-
-Ver qual GitHub está conectado:
+Check the daemon:
 
 ```bash
-git remote -v
+systemctl --user status awww-daemon
 ```
 
-Adicionar um GitHub:
+### Quickshell
+
+Launch the wallpaper switcher manually:
 
 ```bash
-git remote add origin URL_DO_REPOSITORIO
-```
-
-Alterar o GitHub conectado:
-
-```bash
-git remote set-url origin URL_DO_REPOSITORIO
-```
-
----
-
-# 👤 Configuração do Git
-
-Ver seu nome:
-
-```bash
-git config --global user.name
-```
-
-Ver seu e-mail:
-
-```bash
-git config --global user.email
-```
-
-Alterar seu nome:
-
-```bash
-git config --global user.name "Seu Nome"
-```
-
-Alterar seu e-mail:
-
-```bash
-git config --global user.email "seu@email.com"
-```
-
-Ver todas as configurações:
-
-```bash
-git config --global --list
+~/my-dotfiles/quickshell/wallpaper-switcher/launch.sh
 ```
 
 ---
 
-# 🌿 Branches
+## 🔐 Security
 
-Branches permitem criar linhas diferentes de desenvolvimento.
+Machine-specific or sensitive information should never be committed to this repository.
 
-Ver branches:
+Do not commit:
 
-```bash
-git branch
-```
+* passwords
+* API keys
+* access tokens
+* private keys
+* session data
+* personal secrets
+* unnecessary machine-specific paths
 
-Criar uma branch:
-
-```bash
-git branch nome-da-branch
-```
-
-Trocar de branch:
-
-```bash
-git switch nome-da-branch
-```
-
-Criar e entrar em uma nova branch:
-
-```bash
-git switch -c nome-da-branch
-```
+Configuration should remain as portable as possible.
 
 ---
 
-# 🏷️ Versões
+## 📝 Credits
 
-Versões importantes podem receber uma tag.
+This project uses and builds upon many open-source projects.
 
-Criar uma versão:
+Special thanks to the developers of:
 
-```bash
-git tag v1.0.0
-```
+* Hyprland
+* Waybar
+* Wofi
+* Kitty
+* Fish
+* Thunar
+* Quickshell
+* awww
+* Fastfetch
+* grim
+* slurp
+* wl-clipboard
+* qt6ct
 
-Enviar a versão para o GitHub:
-
-```bash
-git push origin v1.0.0
-```
-
-Exemplo:
-
-```text
-v1.0.0 → Primeiro rice
-v1.1.0 → Novo tema
-v1.2.0 → Novos atalhos
-v2.0.0 → Grande reformulação
-```
+Wallpaper sources and artists are credited where applicable.
 
 ---
 
-# 🧰 Comandos úteis
+## 📜 License
 
-A pasta `commands/` contém comandos úteis para Linux e aplicativos.
+The configuration files and scripts in this repository are personal work and are provided for personal use.
 
-Cada página deve explicar:
-
-* O que o comando faz
-* Sintaxe
-* Exemplos
-* Quando usar
-* Possíveis riscos
-* Como desfazer, quando possível
+Third-party software, artwork, wallpapers and other external resources remain under their respective licenses.
 
 ---
 
-# 📚 Documentação
+## ❤️ About
 
-A pasta `docs/` contém documentação mais detalhada sobre o projeto.
+This project started as a personal Linux rice and is gradually becoming a complete system for rebuilding and maintaining my desktop environment.
 
-Exemplos:
+The long-term goal is simple:
 
-```text
-docs/
-├── installation.md
-├── customization.md
-├── commands.md
-├── shortcuts.md
-└── troubleshooting.md
-```
-
----
-
-# 🔄 Scripts
-
-A pasta `scripts/` terá ferramentas para facilitar o gerenciamento do projeto:
-
-```text
-scripts/
-├── install/
-├── update/
-├── sync/
-└── rollback/
-```
-
-A ideia é futuramente poder usar comandos simples como:
-
-```bash
-rice-update
-rice-sync
-rice-versions
-rice-rollback
-```
-
----
-
-# 🖥️ Ambiente
-
-**Sistema:** CachyOS
-
-**Desktop:** Hyprland
-
-**Shell:** F
+> **Install CachyOS → clone the repository → run the installer → get the environment back.**
