@@ -12,3 +12,5 @@ awww
 grim
 slurp
 wl-clipboard
+tumbler
+ffmpegthumbnailer

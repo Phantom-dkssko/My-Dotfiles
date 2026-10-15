@@ -1,0 +1,279 @@
+#!/usr/bin/env bash
+
+set -u
+
+BATCH=10
+TAB=$'\t'
+INPUT="${*:-}"
+
+need() {
+    command -v "$1" >/dev/null 2>&1 || {
+        echo "Erro: '$1' não está instalado."
+        exit 1
+    }
+}
+
+need yt-dlp
+need fzf
+need mpv
+need curl
+need python3
+
+play_video() {
+    exec mpv \
+        --force-window=immediate \
+        --hwdec=auto-safe \
+        --ytdl-format='bestvideo[height<=2160]+bestaudio/best[height<=2160]' \
+        "$1"
+}
+
+if [[ -z "$INPUT" ]]; then
+    printf "Pesquisar vídeo, canal ou colar link: "
+    read -r INPUT
+fi
+
+[[ -n "$INPUT" ]] || exit 0
+
+# Link direto: vídeo ou playlist
+case "$INPUT" in
+    http://*|https://*)
+        case "$INPUT" in
+            *youtube.com/@*|*youtube.com/channel/*|*youtube.com/c/*|*youtube.com/user/*)
+                ;;
+            *)
+                play_video "$INPUT"
+                ;;
+        esac
+        ;;
+esac
+
+STATE="$(mktemp -d)"
+
+cleanup() {
+    rm -rf "$STATE"
+}
+
+trap cleanup EXIT INT TERM
+
+sanitize_title() {
+    python3 -c '
+import sys
+import re
+import unicodedata
+
+title = sys.stdin.read().strip()
+title = unicodedata.normalize("NFC", title)
+
+# Remove controles/bidi que podem deixar texto estranho no terminal.
+title = re.sub(
+    r"[\x00-\x1F\x7F-\x9F\u061C\u200E\u200F\u202A-\u202E\u2066-\u2069]",
+    "",
+    title
+)
+
+title = title.replace("\t", " ")
+title = re.sub(r"[ \t\r\n]+", " ", title)
+print(title.strip())
+'
+}
+
+get_title() {
+    local id="$1"
+    local title=""
+
+    title="$(
+        curl -fsSL \
+            --retry 2 \
+            --connect-timeout 5 \
+            --max-time 12 \
+            -A 'Mozilla/5.0' \
+            -G \
+            --data-urlencode "url=https://www.youtube.com/watch?v=$id" \
+            --data "format=json" \
+            'https://www.youtube.com/oembed' 2>/dev/null |
+        python3 -c '
+import json
+import sys
+
+try:
+    data = json.load(sys.stdin)
+    print(data.get("title", ""))
+except Exception:
+    pass
+' |
+        sanitize_title
+    )"
+
+    printf '%s' "$title"
+}
+
+get_target() {
+    case "$INPUT" in
+        https://www.youtube.com/@*|http://www.youtube.com/@*|https://youtube.com/@*|http://youtube.com/@*)
+            printf '%s/videos' "${INPUT%/}"
+            ;;
+        https://www.youtube.com/channel/*|http://www.youtube.com/channel/*|https://youtube.com/channel/*|http://youtube.com/channel/*)
+            printf '%s/videos' "${INPUT%/}"
+            ;;
+        https://www.youtube.com/c/*|http://www.youtube.com/c/*|https://youtube.com/c/*|http://youtube.com/c/*)
+            printf '%s/videos' "${INPUT%/}"
+            ;;
+        https://www.youtube.com/user/*|http://www.youtube.com/user/*|https://youtube.com/user/*|http://youtube.com/user/*)
+            printf '%s/videos' "${INPUT%/}"
+            ;;
+        *)
+            printf 'ytsearch%s:%s' "$1" "$INPUT"
+            ;;
+    esac
+}
+
+fetch_page() {
+    local page="$1"
+    local cache="$STATE/page_${page}.tsv"
+    local ids_file="$STATE/page_${page}.ids"
+    local start
+    local end
+    local target
+    local ids
+    local count
+    local i
+    local id
+    local title
+
+    # Usa cache quando a página já foi visitada.
+    if [[ -s "$cache" ]]; then
+        cat "$cache"
+        return 0
+    fi
+
+    start=$(( (page - 1) * BATCH + 1 ))
+    end=$(( page * BATCH ))
+
+    target="$(get_target "$end")"
+
+    ids="$STATE/page_${page}.ids"
+    : > "$ids"
+
+    yt-dlp \
+        --ignore-config \
+        --flat-playlist \
+        --quiet \
+        --no-warnings \
+        --skip-download \
+        --playlist-start "$start" \
+        --playlist-end "$end" \
+        --print '%(id)s' \
+        "$target" 2> "$STATE/error_${page}" |
+    tail -n "$BATCH" > "$ids"
+
+    [[ -s "$ids" ]] || return 1
+
+    count="$(wc -l < "$ids")"
+
+    # Busca todos os títulos em paralelo.
+    i=0
+
+    while IFS= read -r id; do
+        [[ -n "$id" ]] || continue
+
+        i=$((i + 1))
+
+        (
+            title="$(get_title "$id")"
+
+            if [[ -z "$title" ]]; then
+                title="[Título indisponível]"
+            fi
+
+            printf '%s\t%s\t%s\n' "$i" "$title" "$id" \
+                > "$STATE/page_${page}.item_${i}"
+        ) &
+    done < "$ids"
+
+    # Espera todos os títulos terminarem.
+    wait
+
+    : > "$cache"
+
+    for i in $(seq 1 "$count"); do
+        if [[ -s "$STATE/page_${page}.item_${i}" ]]; then
+            cat "$STATE/page_${page}.item_${i}" >> "$cache"
+        fi
+    done
+
+    [[ -s "$cache" ]]
+}
+
+PAGE=1
+MESSAGE=""
+
+if ! fetch_page "$PAGE" >/dev/null; then
+    echo "Nenhum resultado encontrado."
+
+    if [[ -s "$STATE/error_${PAGE}" ]]; then
+        cat "$STATE/error_${PAGE}"
+    fi
+
+    exit 1
+fi
+
+while true; do
+    HEADER="Página $PAGE  |  ← voltar  → avançar  |  Enter = abrir"
+
+    if [[ -n "$MESSAGE" ]]; then
+        HEADER="$MESSAGE  |  $HEADER"
+        MESSAGE=""
+    fi
+
+    mapfile -t FZF_OUTPUT < <(
+        cat "$STATE/page_${PAGE}.tsv" |
+        fzf \
+            --height=90% \
+            --reverse \
+            --border \
+            --layout=reverse \
+            --no-sort \
+            --prompt="YouTube > " \
+            --header="$HEADER" \
+            --delimiter="$TAB" \
+            --with-nth=2 \
+            --no-multi \
+            --expect=left,right
+    )
+
+    [[ "${#FZF_OUTPUT[@]}" -gt 0 ]] || exit 0
+
+    KEY="${FZF_OUTPUT[0]:-}"
+
+    if [[ "$KEY" == "right" ]]; then
+        NEXT=$((PAGE + 1))
+
+        if fetch_page "$NEXT" >/dev/null; then
+            PAGE="$NEXT"
+        else
+            MESSAGE="Fim dos resultados"
+        fi
+
+        continue
+    fi
+
+    if [[ "$KEY" == "left" ]]; then
+        if (( PAGE > 1 )); then
+            PAGE=$((PAGE - 1))
+        else
+            MESSAGE="Você já está na primeira página"
+        fi
+
+        continue
+    fi
+
+    SELECTED="${FZF_OUTPUT[1]:-}"
+
+    [[ -n "$SELECTED" ]] || exit 0
+
+    ID="${SELECTED##*$TAB}"
+
+    [[ -n "$ID" ]] || exit 1
+
+    play_video "https://www.youtube.com/watch?v=$ID"
+done

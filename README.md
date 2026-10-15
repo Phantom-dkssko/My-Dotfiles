@@ -1,482 +1,333 @@
-# My Dotfiles
+# My-Dotfiles
 
-Personal dotfiles and rice configuration for **CachyOS + Hyprland**.
+> **Current version:** `0.5.4-alpha`
 
-This repository contains my desktop configuration, themes, wallpapers, scripts, package lists and tools used to rebuild my setup after reinstalling the system.
+My personal Linux desktop configuration, built around **CachyOS, Hyprland, Waybar, Quickshell, and Wofi**.
 
-> **Status:** Active development
-> **Current version:** `0.5.3-alpha`
+The goal of this project is to make rebuilding and customizing my Linux desktop easier through organized configurations, themes, wallpapers, useful scripts, and documented keyboard shortcuts.
 
----
+**Status:** Alpha — configurations and installation scripts are still evolving.
 
 ## ✨ Features
 
-* 🪟 Hyprland window manager configuration
-* 📊 Waybar with multiple themes
-* 🚀 Wofi application launcher
-* 🖥️ Customized Kitty terminal
-* 🐚 Fish shell configuration
-* 📁 Thunar file manager integration
-* 🖼️ Wallpaper management with awww
-* 🎨 Quickshell wallpaper and theme selector
-* 💻 Customized Fastfetch
-* 📦 Essential and optional package lists
-* ⚙️ Automatic installation script
-* 🔄 Git-based versioning
-* ↩️ Version rollback system
-* ⌨️ Custom Hyprland keybinds
+- 🪟 Hyprland Wayland compositor configuration
+- 🎨 Waybar and Quickshell customization
+- 🚀 Wofi application launcher
+- 💻 Kitty terminal and Fish shell configuration
+- 📁 Thunar file manager configuration
+- 🖼️ Wallpaper collection and startup configuration
+- 📦 Essential and optional package lists
+- 🔄 Git-based versioning and rollback scripts
+- 💾 Backups of selected existing configurations
+- ⌨️ Keyboard shortcuts for common desktop actions
+- 🛠️ Installation and update scripts
 
----
+## 🖥️ Desktop environment
 
-## 🖥️ Environment
+This project is primarily designed for:
 
-| Component          | Software   |
-| ------------------ | ---------- |
-| Operating System   | CachyOS    |
-| Window Manager     | Hyprland   |
-| Shell              | Fish       |
-| Terminal           | Kitty      |
-| Status Bar         | Waybar     |
-| Launcher           | Wofi       |
-| File Manager       | Thunar     |
-| Wallpaper Daemon   | awww       |
-| Wallpaper UI       | Quickshell |
-| System Information | Fastfetch  |
-| Qt Configuration   | qt6ct      |
+- **Operating system:** CachyOS / Arch Linux
+- **Window manager:** Hyprland
+- **Status bar:** Waybar
+- **Application launcher:** Wofi
+- **Terminal:** Kitty
+- **Shell:** Fish
+- **File manager:** Thunar
+- **Desktop shell:** Quickshell
+- **Wallpaper daemon:** awww
 
----
+Other Linux distributions may require changes to package names, dependencies, or configuration paths.
 
-## 📦 Components
+## ⚠️ Before installing
 
-The main applications and projects used by this rice:
+These are personal configurations and may not work perfectly on every computer.
 
-* [Hyprland](https://hyprland.org/)
-* [Waybar](https://github.com/Alexays/Waybar)
-* [Wofi](https://github.com/SimplyCEO/wofi)
-* [Kitty](https://sw.kovidgoyal.net/kitty/)
-* [Fish](https://fishshell.com/)
-* [Thunar](https://docs.xfce.org/xfce/thunar/start)
-* [Fastfetch](https://github.com/fastfetch-cli/fastfetch)
-* [Quickshell](https://github.com/quickshell-mirror/quickshell)
-* [awww](https://github.com/waycrate/awww)
-* [grim](https://github.com/emersion/grim)
-* [slurp](https://github.com/emersion/slurp)
-* [wl-clipboard](https://github.com/bugaevc/wl-clipboard)
-* [qt6ct](https://github.com/trialuser02/qt6ct)
+- The installer uses `pacman` and is intended for Arch-based distributions.
+- Review the scripts before executing them.
+- Back up important files before installing.
+- Selected existing configuration directories may be moved to a timestamped backup directory.
+- Installing these dotfiles can change desktop behavior, appearance, and keyboard shortcuts.
 
----
-
-## 🎨 Themes
-
-### Waybar
-
-The rice currently includes four Waybar themes:
-
-* Nord
-* Glass
-* Minimal
-* Terminal
-
-Change the Waybar theme with:
-
-**Super + Shift + B**
-
-### Wallpaper Switcher
-
-The Quickshell wallpaper interface currently includes:
-
-* Terminal
-* Glass
-* Minimal
-
-Open the wallpaper switcher:
-
-**Super + W**
-
-Open the wallpaper theme selector:
-
-**Super + Shift + W**
-
----
-
-## 🖼️ Wallpapers
-
-Wallpapers used by the rice are stored inside:
-
-```text
-wallpapers/
-```
-
-The collection includes wallpapers from different sources and artists.
-
-### PikaOS Wallpapers
-
-Some wallpapers come from the PikaOS wallpaper collection:
-
-[PikaOS Wallpapers](https://github.com/PikaOS-Linux/pkg-pika-wallpapers/tree/main/backgrounds/pika)
-
-Please respect the original licenses and credits of wallpapers and artwork included in this repository.
-
----
-
-## ⌨️ Keybinds
-
-| Shortcut                   | Action                   |
-| -------------------------- | ------------------------ |
-| Super + Enter              | Open terminal            |
-| Super + T                  | Open terminal            |
-| Super + Space              | Open launcher            |
-| Super + E                  | Open Thunar              |
-| Super + B                  | Open browser             |
-| Super + Q                  | Close active window      |
-| Super + M                  | Exit Hyprland            |
-| Super + Shift + R          | Reload Hyprland          |
-| Super + V                  | Open Discord             |
-| Super + F                  | Toggle fullscreen        |
-| Super + W                  | Wallpaper switcher       |
-| Super + Shift + W          | Wallpaper theme selector |
-| Super + Shift + B          | Waybar theme selector    |
-| Super + Arrow Keys         | Move focus               |
-| Super + Shift + Arrow Keys | Move window              |
-| Super + 1-9                | Change workspace         |
-| Super + Shift + 1-9        | Move window to workspace |
-| Super + Shift + S          | Screenshot               |
-
----
-
-## 📁 Project Structure
-
-```text
-my-dotfiles/
-│
-├── hyprland/
-│   └── hyprland.conf
-│
-├── waybar/
-│   ├── config.jsonc
-│   ├── style.css
-│   ├── theme-selector.sh
-│   └── themes/
-│
-├── wofi/
-│   └── style.css
-│
-├── kitty/
-│   ├── kitty.conf
-│   ├── current-theme.conf
-│   └── Adwaita dark.conf
-│
-├── fish/
-│   └── config.fish
-│
-├── thunar/
-│   ├── accels.scm
-│   └── uca.xml
-│
-├── fastfetch/
-│   ├── config.jsonc
-│   └── aesthetic.jpg
-│
-├── quickshell/
-│   └── wallpaper-switcher/
-│
-├── wallpapers/
-│
-├── packages/
-│   ├── essential.txt
-│   └── optional.txt
-│
-├── scripts/
-│   ├── install/
-│   ├── update/
-│   ├── sync/
-│   └── rollback/
-│
-├── commands/
-├── shortcuts/
-├── themes/
-├── icons/
-├── screenshots/
-├── docs/
-│
-├── VERSION
-├── CHANGELOG.md
-└── README.md
-```
-
----
+**Do not run installation scripts blindly on a system you depend on.**
 
 ## 🚀 Installation
 
-The goal of this repository is to make rebuilding the desktop after a system reinstall as simple as possible.
+### 1. Install Git
 
-### 1. Clone the repository
+On CachyOS or another Arch-based distribution:
 
 ```bash
-git clone <REPOSITORY_URL>
-cd my-dotfiles
+sudo pacman -S --needed git
 ```
 
-### 2. Run the installer
+### 2. Clone the repository
+
+```bash
+git clone https://github.com/Phantom-dkssko/My-Dotfiles.git
+```
+
+Enter the project directory:
+
+```bash
+cd My-Dotfiles
+```
+
+### 3. Review the installer
+
+Before running it, inspect the installation script:
+
+```bash
+less scripts/install/install.sh
+```
+
+Press `q` to exit.
+
+### 4. Run the installer
+
+When you are ready:
 
 ```bash
 chmod +x scripts/install/install.sh
 ./scripts/install/install.sh
 ```
 
-The installer handles the main parts of the setup automatically.
+The installer uses `sudo` to install packages and may ask for your password.
 
-### What the installer does
+### 5. Restart your session
 
-1. Installs essential packages.
-2. Creates a backup of existing configurations.
-3. Installs the Hyprland configuration.
-4. Installs Waybar and its themes.
-5. Installs Wofi.
-6. Installs Kitty configuration.
-7. Installs Fish configuration.
-8. Installs Thunar configuration.
-9. Installs Fastfetch configuration.
-10. Installs Quickshell configuration.
-11. Copies the wallpaper collection.
-12. Sets Thunar as the default file manager.
-13. Configures the awww wallpaper daemon.
-14. Sets executable permissions on the required scripts.
+After installation finishes, log out of Hyprland and log back in to apply the changes.
 
-After installation, logging out and back into Hyprland is recommended.
+## 📦 What the installer does
 
----
+The current installer is designed to:
 
-## 💾 Backups
+1. Install essential packages from `packages/essential.txt`.
+2. Back up selected existing configuration directories.
+3. Install the Hyprland configuration.
+4. Install Waybar and Wofi configurations.
+5. Install Kitty and Fish configurations.
+6. Install Thunar and Fastfetch configurations.
+7. Install Quickshell configurations.
+8. Copy the wallpaper collection.
+9. Set Thunar as the default file manager.
+10. Configure and enable the awww wallpaper daemon.
+11. Set executable permissions on relevant scripts.
 
-The installer does not simply overwrite everything.
+The exact behavior depends on the current contents of the installer and package lists.
 
-Existing configuration directories are moved into a timestamped backup directory before the new configuration is installed.
+## ⌨️ Keyboard shortcuts
 
-Example:
+The following are the main shortcuts intended for this setup. Check your actual Hyprland configuration if a binding differs.
 
-```text
-~/.config/dotfiles-backup-20261004-120000/
+| Shortcut | Action |
+|---|---|
+| `Super + Enter` | Open Kitty |
+| `Super + D` | Open Wofi |
+| `Super + Q` | Close the focused window |
+| `Super + F` | Toggle fullscreen |
+| `Super + E` | Open Thunar |
+| `Super + B` | Open the browser |
+| `Super + V` | Open Discord |
+| `Super + 1–9` | Switch workspace |
+| `Super + Shift + 1–9` | Move the focused window to a workspace |
+| `Super + Arrow keys` | Navigate between windows |
+
+`Super` usually refers to the Windows key on a standard keyboard.
+
+To inspect the bindings on your system:
+
+```bash
+less ~/.config/hypr/hyprland.conf
 ```
 
-This makes it possible to recover previous configurations if necessary.
+## 📁 Repository structure
 
----
+```text
+My-Dotfiles/
+├── commands/
+│   ├── apps/
+│   ├── cheatsheets/
+│   └── linux/
+├── docs/
+├── dolphin/
+├── fastfetch/
+├── fish/
+├── hyprland/
+├── icons/
+├── kitty/
+├── packages/
+│   ├── essential.txt
+│   └── optional.txt
+├── quickshell/
+├── screenshots/
+├── scripts/
+│   ├── install/
+│   │   └── install.sh
+│   ├── rollback/
+│   │   └── rice-rollback.sh
+│   ├── start/
+│   │   └── wallpaper-start.sh
+│   └── update/
+│       ├── rice-update.sh
+│       └── rice-versions.sh
+├── shortcuts/
+├── themes/
+├── thunar/
+├── wallpapers/
+├── waybar/
+├── wofi/
+├── CHANGELOG.md
+├── README.md
+└── VERSION
+```
 
-## 🔄 Versioning
+Some directories may contain experimental or unfinished features.
 
-The project uses Git tags and semantic-style versioning.
+### Where to edit things
+
+- `hyprland/` — Hyprland configuration and keyboard shortcuts.
+- `waybar/` — status bar layout and styling.
+- `wofi/` — application launcher styling.
+- `kitty/` — terminal appearance and settings.
+- `fish/` — shell configuration and functions.
+- `quickshell/` — desktop widgets, shell components, and wallpaper interface.
+- `wallpapers/` — wallpaper collection.
+- `packages/` — essential and optional package lists.
+- `scripts/install/` — installation script.
+- `scripts/update/` — version update and listing scripts.
+- `scripts/rollback/` — rollback script.
+- `scripts/start/` — startup scripts.
+- `commands/` — helper commands and cheatsheets.
+- `docs/` — project documentation.
+- `CHANGELOG.md` — project change history.
+- `VERSION` — current development version.
+
+## 🖼️ Wallpapers
+
+The repository contains wallpapers used with the desktop configuration.
+
+Add your own images to `wallpapers/` and adjust the wallpaper configuration in `quickshell/` as needed.
+
+The collection also includes images sourced from [PikaOS Wallpapers](https://github.com/PikaOS-Linux/pkg-pika-wallpapers/tree/main/backgrounds/pika).
+
+Check the original sources and their licensing terms before redistributing images.
+
+## 🔄 Updating the dotfiles
+
+To download the latest repository changes:
+
+```bash
+cd ~/My-Dotfiles
+git pull
+```
+
+Review changes before applying updated configurations. Pulling updates the local repository; it does not necessarily apply every configuration change automatically.
+
+## 🏷️ Versioning
+
+This project uses Git tags and a semantic-style versioning workflow.
+
+The current version is stored in the `VERSION` file.
 
 Current version:
 
 ```text
-0.5.3-alpha
+0.5.4-alpha
 ```
 
-Example release tag:
+Example Git tag:
 
 ```text
-v0.5.3-alpha
+v0.5.4-alpha
 ```
 
-The project uses:
+The version update script can be run with:
 
-* **PATCH** — small fixes
-* **MINOR** — new features
-* **MAJOR** — major changes
+```bash
+./scripts/update/rice-update.sh
+```
 
-Development versions currently use the `alpha` suffix.
+Version increments:
 
----
+- **PATCH** — bug fixes and small corrections.
+- **MINOR** — new features and improvements.
+- **MAJOR** — significant changes that may require configuration updates.
+
+The `alpha` suffix indicates that the project is still under development. Local tests and changes do not automatically become official releases.
 
 ## ↩️ Rollback
 
-The rice includes a rollback system for returning to previous versions.
+The project includes scripts for inspecting available versions and returning to an earlier version.
 
-The goal is to make it possible to experiment with the rice without permanently breaking the setup.
-
-Available versions can be viewed with:
+List available versions:
 
 ```bash
-./scripts/rice-versions.sh
+./scripts/update/rice-versions.sh
 ```
 
-Previous versions can be restored using:
+Run the rollback script:
 
 ```bash
 ./scripts/rollback/rice-rollback.sh
 ```
 
-Rollback requires the Git working tree to be clean.
+**Before using rollback:** save your work and make sure the Git working tree is clean. Review the script first, because restoring an earlier version can replace repository files. A Git rollback does not automatically restore every installed configuration in `~/.config`.
 
----
+## ▶️ Terminal media tools
 
-## 🛠️ Development
+The repository may include experimental helper commands under `commands/apps/` for searching and playing online media using tools such as `fzf`, `yt-dlp`, and `mpv`.
 
-This repository is actively developed directly on the system where the rice is being used.
+These tools depend on external services and may stop working when those services change their access requirements. They are not guaranteed to work on every system and are separate from the core desktop installation.
 
-Before making changes:
+## 🧰 Useful commands
+
+Check the current project version:
+
+```bash
+cat VERSION
+```
+
+Check the Git working tree:
 
 ```bash
 git status
 ```
 
-After making changes:
+Review recent commits:
 
 ```bash
-git add .
-git commit
+git log --oneline -10
 ```
 
-The project uses Git tags to preserve stable points in the development history.
-
----
-
-## 🗺️ Roadmap
-
-### Completed
-
-* [x] Hyprland configuration
-* [x] Waybar configuration
-* [x] Waybar theme selector
-* [x] Wofi configuration
-* [x] Kitty configuration
-* [x] Fish configuration
-* [x] Thunar configuration
-* [x] Fastfetch configuration
-* [x] awww wallpaper system
-* [x] Quickshell wallpaper switcher
-* [x] Wallpaper themes
-* [x] Package lists
-* [x] Automatic installer
-* [x] Version system
-* [x] Rollback system
-
-### Planned
-
-* [ ] Git synchronization script
-* [ ] More wallpaper themes
-* [ ] More Waybar themes
-* [ ] More automated configuration checks
-* [ ] Improved troubleshooting tools
-* [ ] Full one-command restoration
-* [ ] Better documentation
-* [ ] Rice screenshots and showcase
-
----
-
-## 🧪 Tested Environment
-
-The rice is currently developed and tested on:
-
-```text
-CachyOS
-Hyprland
-Wayland
-Fish
-```
-
-Other Arch-based distributions may work, but CachyOS is the primary target.
-
----
-
-## 🐛 Troubleshooting
-
-### Hyprland configuration
-
-Check for configuration errors:
+Inspect the installer:
 
 ```bash
-hyprctl configerrors
+less scripts/install/install.sh
 ```
 
-Reload the configuration:
+Inspect the Hyprland configuration:
 
 ```bash
-hyprctl reload
+less hyprland/hyprland.conf
 ```
 
-### Waybar
+## 🔗 Project links
 
-Restart Waybar:
+- [My-Dotfiles repository](https://github.com/Phantom-dkssko/My-Dotfiles)
+- [Hyprland](https://hypr.land/)
+- [Waybar](https://github.com/Alexays/Waybar)
+- [Quickshell](https://quickshell.org/)
+- [Wofi](https://hg.sr.ht/~scoopta/wofi)
+- [Kitty](https://sw.kovidgoyal.net/kitty/)
+- [Fish shell](https://fishshell.com/)
+- [Thunar](https://docs.xfce.org/xfce/thunar/start)
 
-```bash
-pkill waybar
-waybar &
-```
+## 📌 Project status
 
-### awww
+This project is actively evolving. Some components are stable enough for daily use, while others are experimental or still being documented.
 
-Check the daemon:
-
-```bash
-systemctl --user status awww-daemon
-```
-
-### Quickshell
-
-Launch the wallpaper switcher manually:
-
-```bash
-~/my-dotfiles/quickshell/wallpaper-switcher/launch.sh
-```
+Contributions, bug reports, and suggestions are welcome.
 
 ---
 
-## 🔐 Security
-
-Machine-specific or sensitive information should never be committed to this repository.
-
-Do not commit:
-
-* passwords
-* API keys
-* access tokens
-* private keys
-* session data
-* personal secrets
-* unnecessary machine-specific paths
-
-Configuration should remain as portable as possible.
-
----
-
-## 📝 Credits
-
-This project uses and builds upon many open-source projects.
-
-Special thanks to the developers of:
-
-* Hyprland
-* Waybar
-* Wofi
-* Kitty
-* Fish
-* Thunar
-* Quickshell
-* awww
-* Fastfetch
-* grim
-* slurp
-* wl-clipboard
-* qt6ct
-
-Wallpaper sources and artists are credited where applicable.
-
----
-
-## 📜 License
-
-The configuration files and scripts in this repository are personal work and are provided for personal use.
-
-Third-party software, artwork, wallpapers and other external resources remain under their respective licenses.
-
----
-
-## ❤️ About
-
-This project started as a personal Linux rice and is gradually becoming a complete system for rebuilding and maintaining my desktop environment.
-
-The long-term goal is simple:
-
-> **Install CachyOS → clone the repository → run the installer → get the environment back.**
+*Made for my own Linux desktop, shared so others can explore, customize, and learn from it.*
